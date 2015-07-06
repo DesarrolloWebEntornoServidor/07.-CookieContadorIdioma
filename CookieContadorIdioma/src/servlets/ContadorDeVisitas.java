@@ -52,7 +52,7 @@ public class ContadorDeVisitas extends HttpServlet {
 				recibirCookie(request);
 
 				// Array asociativo para generar el radio button con scriptlet
-				generarArrayAsociativo();
+				iniciarArrayAsociativo();
 
 				contarVisitas();
 
@@ -60,14 +60,23 @@ public class ContadorDeVisitas extends HttpServlet {
 				imprimirPagina(out);
 			} else { // Si el usuario no es válido, se vuelve a la ventana de
 						// login
-				RequestDispatcher rd = request
-						.getRequestDispatcher("PAGINA_LOGIN");
-				rd.forward(request, response);
+				redirigirPagina(request, response);
 			}
 		} catch (Exception e) {
-			out.println("Se produce una excepción <br />");
-			out.println(e.getMessage());
+			generarPaginaError(out, e);
 		}
+	}
+
+	private void generarPaginaError(PrintWriter out, Exception e) {
+		out.println("Se produce una excepción <br />");
+		out.println(e.getMessage());
+	}
+
+	private void redirigirPagina(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		RequestDispatcher rd = request
+				.getRequestDispatcher("PAGINA_LOGIN");
+		rd.forward(request, response);
 	}
 
 	private void iniciarArrayUsuarios() {
@@ -115,7 +124,7 @@ public class ContadorDeVisitas extends HttpServlet {
 
 	}
 
-	private void generarArrayAsociativo() {
+	private void iniciarArrayAsociativo() {
 		arrayCiclos = new LinkedHashMap<String, String>();
 		arrayCiclos.put("ASIR", "ASIR");
 		arrayCiclos.put("DAM", "DAM");
